@@ -9,8 +9,10 @@
   <body>
     <div id="app">
       <p v-if="characterList.length === 0">There are no characters</p>
-      <ul v-else-if="characterList.length % 2 === 0">
-        <li v-for="character in characterList">{{ character.name }}</li>
+      <ul v-else>
+        <li v-for="character in characterList">{{ character.name }}
+          <button @click="addToFavorite" :value="character.name">Favorite</button>
+        </li>
       </ul>
       <p>
         <span v-for="(character, index) in characterList"
@@ -18,7 +20,12 @@
           }}
         </span>
       </p>
-      <p v-else>There are odd characters!</p>
+
+      <p>My Favorite Characters:
+        <span v-if="myFavList.length === 0">Currently have no favorite character!</span>
+        <span v-else v-for="(character, index) in myFavList">{{ character}}{{ index === myFavList.length - 1 ? '' : ', '}}</span>
+      </p>
+      <!-- <p v-else>There are odd characters!</p> -->
     </div>
 
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
@@ -38,8 +45,19 @@
             {
               name: 'Katara'
             }
-          ]
-        })
+          ],
+          myFavList: [],
+        }),
+        methods: {
+          addToFavorite() {
+            const newFav = event.target.value
+            if (!this.myFavList.includes(newFav)) {
+              this.myFavList.push(event.target.value)
+            } else {
+              alert('This character already exists in your favorite list')
+            }
+          },
+        }
       }).mount('#app')
     </script>
   </body>
