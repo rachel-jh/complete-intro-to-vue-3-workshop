@@ -11,15 +11,23 @@
       <p v-if="characterList.length === 0">There are no characters</p>
       <ul v-else>
         <li v-for="character in characterList">{{ character.name }}
-          <button @click="addToFavorite" :value="character.name">Favorite</button>
+          <button @click="addToFavorite(character)">Favorite</button>
         </li>
       </ul>
-      <p>
+      <hr />
+      <form>
+        <h3>Add new characters to the page:</h3>
+        <label for="newCharacter">New Character Name:</label>
+        <input type="text" id="newCharacter" v-model="newCharacter.name">
+        <button @click.prevent="addNewCharacter">Add New Charater</button>  
+      </form>
+      <hr />
+      <!-- <p>
         <span v-for="(character, index) in characterList"
           >{{ character.name }}{{ index === characterList.length - 1 ? '' : ', '
           }}
         </span>
-      </p>
+      </p> -->
 
       <p>My Favorite Characters:
         <span v-if="myFavList.length === 0">Currently have no favorite character!</span>
@@ -32,6 +40,9 @@
     <script>
       Vue.createApp({
         data: () => ({
+          newCharacter: {
+            name: ''
+          },
           characterList: [
             {
               name: 'Aang'
@@ -49,14 +60,25 @@
           myFavList: [],
         }),
         methods: {
-          addToFavorite() {
-            const newFav = event.target.value
-            if (!this.myFavList.includes(newFav)) {
-              this.myFavList.push(event.target.value)
+          addToFavorite(character) {
+            if (!this.myFavList.includes(character.name)) {
+              this.myFavList.push(character.name)
             } else {
               alert('This character already exists in your favorite list')
             }
           },
+          addNewCharacter() {
+            console.log(this.characterList.some((ele) => {
+              ele.name === this.newCharacter.name}))
+            if (!this.characterList.some((ele) => ele.name == this.newCharacter.name)) {
+              this.characterList.push(this.newCharacter)
+            } else {
+              alert('This character already exists in your favorite list')
+            }
+            this.newCharacter = {
+              name: ''
+            }
+          }
         }
       }).mount('#app')
     </script>
